@@ -38,7 +38,8 @@ export default {
       let dataForm = {
         id: 0,
         title: "",
-        description: ""
+        description: "",
+        mode: "save"
       };
       this.$root.$emit("emitForm", dataForm);
     }

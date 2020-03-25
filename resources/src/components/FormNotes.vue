@@ -1,9 +1,15 @@
 <template>
   <div class="formNotes">
-    <form @submit="submitNote">
+    <form>
       <div class="menu">
         <button type="button" @click="submitRemove" class="bg-danger btn btn-delete">Delete</button>
-        <button type="submit" class="bg-success btn">Save</button>
+        <button type="button" @click="submitSave" class="bg-success btn" v-if="mode == 'save'">Save</button>
+        <button
+          type="button"
+          @click="submitUpdate"
+          class="bg-success btn"
+          v-if="mode == 'update'"
+        >Update</button>
       </div>
       <div class="content">
         <input type="text" class="text" placeholder="Title" v-model="id" />
@@ -29,22 +35,26 @@ export default {
     return {
       id: 0,
       title: "",
-      description: ""
+      description: "",
+      mode: "save"
     };
   },
   methods: {
-    submitNote(e) {
+    submitSave(e) {
       e.preventDefault();
       let data = {
         title: this.title,
         description: this.description
       };
-      if (this.id === 0) {
-        this.$root.$emit("emitSubmitNote", data);
-      } else {
-        data.id = this.id;
-        this.$root.$emit("emitUpdateNote", data);
-      }
+      this.$root.$emit("emitSubmitNote", data);
+    },
+    submitUpdate() {
+      let data = {
+        title: this.title,
+        description: this.description
+      };
+      data.id = this.id;
+      this.$root.$emit("emitUpdateNote", data);
     },
     submitRemove() {
       let data = { id: this.id };
@@ -61,6 +71,7 @@ export default {
       this.id = data.id;
       this.title = data.title;
       this.description = data.description;
+      this.mode = data.mode;
     });
   }
 };

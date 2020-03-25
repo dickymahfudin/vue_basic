@@ -12,14 +12,12 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "ListNotes",
   data() {
     return {
-      notes: [
-        { id: 1, title: "wegodev", description: "data DISM" },
-        { id: 2, title: "wegodev", description: "data DISM" }
-      ]
+      notes: []
     };
   },
   methods: {
@@ -27,9 +25,21 @@ export default {
       let dataForm = this.notes.find(note => note.id === id);
       dataForm.mode = "update";
       this.$root.$emit("emitForm", dataForm);
+    },
+    getdata() {
+      axios
+        .get("http://localhost/wegodev-notes/note")
+        .then(res => {
+          console.log(res);
+          this.notes = res.data;
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
   },
   mounted() {
+    this.getdata();
     this.$root.$on("emitRemoveNote", data => {
       let noteIndex = this.notes.findIndex(note => note.id === data.id);
       this.notes.splice(noteIndex, 1);

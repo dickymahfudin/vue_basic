@@ -30,7 +30,6 @@ export default {
       axios
         .get("http://localhost/wegodev-notes/note")
         .then(res => {
-          console.log(res);
           this.notes = res.data;
         })
         .catch(err => {
@@ -50,13 +49,12 @@ export default {
       this.notes[noteIndex].description = data.description;
     });
     this.$root.$on("emitSubmitNote", data => {
-      let length = this.notes.length + 1;
-      this.notes.push({
-        id: length,
+      this.notes.unshift({
+        id: data.id,
         title: data.title,
         description: data.description
       });
-      this.editNote(length);
+      this.editNote(data.id);
     });
   }
 };

@@ -29,38 +29,71 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "FormNotes",
   data() {
     return {
-      id: 0,
+      id: "",
       title: "",
       description: "",
       mode: "save"
     };
   },
   methods: {
-    submitSave(e) {
-      e.preventDefault();
-      let data = {
-        title: this.title,
-        description: this.description
-      };
-      this.$root.$emit("emitSubmitNote", data);
+    submitSave() {
+      let params = new URLSearchParams();
+      params.append("title", this.title);
+      params.append("description", this.description);
+      axios
+        .post("http://localhost/wegodev-notes/note/create", params)
+        .then(res => {
+          let data = {
+            id: res.data.id,
+            title: this.title,
+            description: this.description
+          };
+          this.$root.$emit("emitSubmitNote", data);
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     submitUpdate() {
-      let data = {
-        title: this.title,
-        description: this.description
-      };
-      data.id = this.id;
-      this.$root.$emit("emitUpdateNote", data);
+      let params = new URLSearchParams();
+      params.append("id", this.id);
+      params.append("title", this.title);
+      params.append("description", this.description);
+      axios
+        .post("http://localhost/wegodev-notes/note/update", params)
+        .then(res => {
+          let data = {
+            id: res.data.id,
+            title: this.title,
+            description: this.description
+          };
+          this.$root.$emit("emitUpdateNote", data);
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     submitRemove() {
-      let data = { id: this.id };
-      console.log(data.id);
-      this.$root.$emit("emitRemoveNote", data);
-      this.resetInput();
+      let params = new URLSearchParams();
+      params.append("id", this.id);
+      axios
+        .post("http://localhost/wegodev-notes/note/delete", params)
+        .then(res => {
+          let data = {
+            id: res.data.id
+          };
+          this.$root.$emit("emitRemoveNote", data);
+          this.resetInput();
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     resetInput() {
       (this.id = 0), (this.title = ""), (this.description = "");

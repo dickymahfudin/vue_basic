@@ -3,7 +3,7 @@
     <div class="kiri">
       <div class="logo">
         <a href="https://wegodev.com">
-          <h2>Wegodev</h2>
+          <h2>Dism</h2>
           <span>Notes</span>
         </a>
       </div>
